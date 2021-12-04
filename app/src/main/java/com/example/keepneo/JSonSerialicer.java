@@ -10,18 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSonSerialicer {
-    List<Nota> notas = null;
     private String fileName;
     private Context contexto;
     private Gson gson;
 
-    JSonSerialicer(String fileName, Context contexto, List<Nota> notas) {
+    JSonSerialicer(String fileName, Context contexto) {
         this.fileName = fileName;
         this.contexto = contexto;
-        this.notas=notas;
     }
 
-    public void save(){
+    public void save(List<Nota> notas){
         gson = new Gson();
         String json = gson.toJson(notas);
         Writer writer = null;
