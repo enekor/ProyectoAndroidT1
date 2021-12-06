@@ -19,6 +19,10 @@ public class JSonSerialicer {
         this.contexto = contexto;
     }
 
+    /**
+     * escribe en un JSon en memeoria un backup de las notas para el sigiente inicio de sesion poder recuperarlas
+     * @param notas a guardar
+     */
     public void save(List<Nota> notas){
         gson = new Gson();
         String json = gson.toJson(notas);
@@ -41,6 +45,10 @@ public class JSonSerialicer {
         }
     }
 
+    /**
+     * recupera las notas guardadas en el JSon en la sesion anterior
+     * @return la lista de notas almacenadas en el JSon
+     */
     public List<Nota> load(){
         List<Nota> returner = null;
 

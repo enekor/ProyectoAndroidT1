@@ -24,4 +24,6 @@ public class Nota {
          this.texto=texto;
          this.importante=importante;
      }
+
+     public Nota(){}
 }
