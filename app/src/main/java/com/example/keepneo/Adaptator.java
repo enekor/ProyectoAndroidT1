@@ -52,6 +52,9 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+
             texto = itemView.findViewById(R.id.previewTitle);
         }
 
