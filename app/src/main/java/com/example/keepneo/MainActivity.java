@@ -2,19 +2,19 @@ package com.example.keepneo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.view.View;
+import android.graphics.Color;
+import android.os.Build;
+import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnClick {
@@ -23,7 +23,10 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     private RecyclerView listado;
     private Adaptator adaptador;
     private LinearLayoutManager llm;
+    private ConstraintLayout layout;
+    private Switch oscuroCheck;
 
+    private boolean modoOscuro = true;
     private JSonSerialicer serialicer;
 
     @Override
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements OnClick {
         setContentView(R.layout.activity_main);
 
         initComponents();
+        listeners();
     }
 
     @Override
@@ -76,8 +80,13 @@ public class MainActivity extends AppCompatActivity implements OnClick {
         llm = new LinearLayoutManager(this);
         listado.setLayoutManager(llm);
 
+        layout = findViewById(R.id.layoutMain);
+        oscuroCheck = findViewById(R.id.modoOscuro);
+        oscuroCheck.setChecked(modoOscuro);
+
         notas = leerFichero();
 
+        cambiarModo();
         setAdaptador();
 
     }
@@ -132,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements OnClick {
      * crea un nuevo adaptador con la lista de notas actualizada y la setea como adaptador del RecyclerView
      */
     private void setAdaptador() {
-        adaptador = new Adaptator(notas, this);
+        adaptador = new Adaptator(notas, this,this.modoOscuro);
         listado.setAdapter(adaptador);
     }
 
@@ -155,5 +164,33 @@ public class MainActivity extends AppCompatActivity implements OnClick {
                 });
 
         return alerta.create();
+    }
+
+    private void cambiarModo() {
+       // Toast.makeText(MainActivity.this, ""+modoOscuro, Toast.LENGTH_SHORT).show();
+
+        if(this.modoOscuro){
+            //Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
+            layout.setBackgroundColor(Color.rgb(40,43,48));
+            listado.setBackgroundColor(Color.rgb(40,43,48));
+        }else{
+            //Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
+            layout.setBackgroundColor(Color.WHITE);
+            listado.setBackgroundColor(Color.WHITE);
+        }
+        setAdaptador();
+    }
+
+    private void listeners(){
+        oscuroCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                modoOscuro = isChecked;
+
+                cambiarModo();
+                //setAdaptador();
+            }
+        });
     }
 }

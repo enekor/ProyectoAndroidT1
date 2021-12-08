@@ -1,5 +1,6 @@
 package com.example.keepneo;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -17,11 +19,13 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
 
     private List<Nota> notas;
     private OnClick onClick;
+    private boolean modoOscuro;
 
-    public Adaptator (List<Nota> notas,OnClick onClick){
+    public Adaptator (List<Nota> notas,OnClick onClick,boolean modoOScuro){
 
         this.notas=notas;
         this.onClick=onClick;
+        this.modoOscuro=modoOScuro;
     }
 
     @NonNull
@@ -40,6 +44,20 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
             String texto = notas.get(position).getTexto().substring(0,19);
             holder.texto.setText(texto +"...");
         }
+
+        if(modoOscuro){
+            holder.texto.setTextColor(Color.WHITE);
+            if(notas.get(position).importante){
+                holder.layout.setBackgroundColor(Color.rgb(34,1,51));
+                holder.texto.setTextColor(Color.GRAY);
+            }
+        }else{
+            holder.texto.setTextColor(Color.BLACK);
+            if(notas.get(position).importante){
+                holder.layout.setBackgroundColor(Color.rgb(203,107,255));
+                holder.texto.setTextColor(Color.BLACK);
+            }
+        }
     }
 
     @Override
@@ -50,6 +68,7 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
         private TextView texto;
+        private ConstraintLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +76,7 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
             itemView.setOnLongClickListener(this);
 
             texto = itemView.findViewById(R.id.previewTitle);
+            layout = itemView.findViewById(R.id.layaout);
         }
 
         @Override
