@@ -57,31 +57,14 @@ public class MainActivity extends AppCompatActivity implements OnClick {
 
     @Override
     public void onClick(int posicion) {
-        Toast.makeText(this, posicion, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+posicion, Toast.LENGTH_SHORT).show();
         ViewNote vn = new ViewNote(notas.get(posicion),posicion);
         vn.show(getSupportFragmentManager(),"Ver nota");
     }
 
     @Override
     public void onLongClick(int posicion) {
-        AlertDialog.Builder alerta = new AlertDialog.Builder(this);
-
-        alerta.setMessage("se procedera a borrar la nota")
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        notas.remove(posicion);
-                        setAdaptador();
-                    }
-                })
-                .setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-        setAdaptador();
+        borrarObjeto(posicion).show();
     }
 
     /**
@@ -151,5 +134,26 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     private void setAdaptador() {
         adaptador = new Adaptator(notas, this);
         listado.setAdapter(adaptador);
+    }
+
+    private AlertDialog borrarObjeto(int posicion) {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+
+        alerta.setMessage("se procedera a borrar la nota")
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        notas.remove(posicion);
+                        setAdaptador();
+                    }
+                })
+                .setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        return alerta.create();
     }
 }

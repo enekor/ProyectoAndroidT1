@@ -34,9 +34,10 @@ public class ViewNote extends DialogFragment {
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View dialogoView = inflater.inflate(R.layout.note,null);
 
-        importante = dialogoView.findViewById(R.id.noteText);
+        importante = dialogoView.findViewById(R.id.importantCheck);
         importante.setChecked(note.isImportante());
-        texto = dialogoView.findViewById(R.id.importantCheck);
+        texto = dialogoView.findViewById(R.id.noteText);
+        texto.setText(note.getTexto());
         isImportant = dialogoView.findViewById(R.id.noteImportant);
         isNotImportant = dialogoView.findViewById(R.id.noteNotInportant);
         guardar = dialogoView.findViewById(R.id.noteOk);
@@ -77,6 +78,8 @@ public class ViewNote extends DialogFragment {
 
                 Nota nota = new Nota(texto.getText().toString(),importante.isChecked());
                 main.saveNote(nota,posicion);
+
+                dismiss();
             }
         });
     }

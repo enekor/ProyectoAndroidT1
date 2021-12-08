@@ -1,5 +1,6 @@
 package com.example.keepneo;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
         @Override
         public void onClick(View v) {
             int posicion = getAdapterPosition();
+            Log.i("info",""+posicion);
             onClick.onClick(posicion);
         }
 
