@@ -101,8 +101,12 @@ public class ViewNote extends DialogFragment {
                 main = (MainActivity) getActivity();
 
                 if(!nuevo) {
-                    Nota nota = new Nota(texto.getText().toString(), importante.isChecked());
-                    main.saveNote(nota, posicion);
+                    if (texto.getText().toString().equals("")) {
+                        main.notaSinTexto();
+                    }else {
+                        Nota nota = new Nota(texto.getText().toString(), importante.isChecked());
+                        main.saveNote(nota, posicion);
+                    }
                 }else{
                     if (texto.getText().toString().equals("")) {
                         main.notaSinTexto();
