@@ -48,8 +48,8 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
         if(modoOscuro){
             holder.texto.setTextColor(Color.WHITE);
             if(notas.get(position).importante){
-                holder.layout.setBackgroundColor(Color.rgb(34,1,51));
-                holder.texto.setTextColor(Color.GRAY);
+                holder.layout.setBackgroundColor(Color.rgb(63,14,88));
+                holder.texto.setTextColor(Color.WHITE);
             }
         }else{
             holder.texto.setTextColor(Color.BLACK);

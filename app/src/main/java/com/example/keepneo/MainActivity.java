@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.newNote){
-            NewNote nn = new NewNote(modoOscuro);
-            nn.show(getSupportFragmentManager(),null);
+            ViewNote vn = new ViewNote(null,-1,modoOscuro,true);
+            vn.show(getSupportFragmentManager(),null);
         }
         return false;
     }
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     @Override
     public void onClick(int posicion) {
         //Toast.makeText(this, ""+posicion, Toast.LENGTH_SHORT).show();
-        ViewNote vn = new ViewNote(notas.get(posicion),posicion,modoOscuro);
+        ViewNote vn = new ViewNote(notas.get(posicion),posicion,modoOscuro,false);
         vn.show(getSupportFragmentManager(),null);
     }
 
@@ -166,23 +166,27 @@ public class MainActivity extends AppCompatActivity implements OnClick {
         return alerta.create();
     }
 
+    /**
+     * cambia de modo de color (oscuro o no) dependiendo de la variable modoOscuro,
+     * que determina el modo actual
+     */
     private void cambiarModo() {
-       // Toast.makeText(MainActivity.this, ""+modoOscuro, Toast.LENGTH_SHORT).show();
 
         if(this.modoOscuro){
-            //Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
             layout.setBackgroundColor(Color.rgb(40,43,48));
             listado.setBackgroundColor(Color.rgb(40,43,48));
             oscuroCheck.setTextColor(Color.WHITE);
         }else{
-            //Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
-            layout.setBackgroundColor(Color.WHITE);
-            listado.setBackgroundColor(Color.WHITE);
+            layout.setBackgroundColor(Color.rgb(240,240,240));
+            listado.setBackgroundColor(Color.rgb(240,240,240));
             oscuroCheck.setTextColor(Color.BLACK);
         }
         setAdaptador();
     }
 
+    /**
+     * donde se almacenan los listener de los botones (en este caso solo 1)
+     */
     private void listeners(){
         oscuroCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -191,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements OnClick {
                 modoOscuro = isChecked;
 
                 cambiarModo();
-                //setAdaptador();
             }
         });
     }

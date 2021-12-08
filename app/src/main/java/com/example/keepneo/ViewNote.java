@@ -22,15 +22,20 @@ public class ViewNote extends DialogFragment {
     private Button guardar;
     private Nota note;
     private ConstraintLayout layout;
+    private boolean nuevo;
 
     private MainActivity main;
     private int posicion;
     private boolean oscuro;
 
-    public ViewNote(Nota note,int posicion,boolean oscuro){
+    public ViewNote(Nota note,int posicion,boolean oscuro, boolean nuevo){
+        if(note==null){
+            note = new Nota();
+        }
         this.note=note;
         this.posicion = posicion;
         this.oscuro = oscuro;
+        this.nuevo=nuevo;
     }
 
     @NonNull
@@ -52,9 +57,13 @@ public class ViewNote extends DialogFragment {
         if(oscuro){
             layout.setBackgroundColor(Color.rgb(40,43,48));
             texto.setTextColor(Color.WHITE);
+            texto.setHintTextColor(Color.GRAY);
+            importante.setTextColor(Color.WHITE);
         }else{
-            layout.setBackgroundColor(Color.WHITE);
+            layout.setBackgroundColor(Color.rgb(240,240,240));
             texto.setTextColor(Color.BLACK);
+            texto.setHintTextColor(Color.GRAY);
+            importante.setTextColor(Color.BLACK);
         }
 
         if(importante.isChecked()){
@@ -91,9 +100,20 @@ public class ViewNote extends DialogFragment {
             public void onClick(View v) {
                 main = (MainActivity) getActivity();
 
-                Nota nota = new Nota(texto.getText().toString(),importante.isChecked());
-                main.saveNote(nota,posicion);
-
+                if(!nuevo) {
+                    Nota nota = new Nota(texto.getText().toString(), importante.isChecked());
+                    main.saveNote(nota, posicion);
+                }else{
+                    if (texto.getText().toString().equals("")) {
+                        main.notaSinTexto();
+                    } else {
+                        Nota nota = new Nota();
+                        nota.setTexto(texto.getText().toString());
+                        nota.setImportante(importante.isChecked());
+                        main.newNote(nota);
+                        dismiss();
+                    }
+                }
                 dismiss();
             }
         });
