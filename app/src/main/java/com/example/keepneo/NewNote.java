@@ -2,6 +2,7 @@ package com.example.keepneo;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
@@ -25,6 +27,12 @@ public class NewNote extends DialogFragment {
     private ImageView importante,noImportante;
     private EditText texto;
     private MainActivity main;
+    private ConstraintLayout layout;
+    private boolean oscuro;
+
+    public NewNote(boolean oscuro){
+        this.oscuro= oscuro;
+    }
 
     @NonNull
     @Override
@@ -39,11 +47,20 @@ public class NewNote extends DialogFragment {
         importante = dialogoView.findViewById(R.id.noteImportant);
         noImportante = dialogoView.findViewById(R.id.noteNotInportant);
         texto = dialogoView.findViewById(R.id.noteText);
+        layout = dialogoView.findViewById(R.id.layoutNota);
+
+        if(oscuro){
+            layout.setBackgroundColor(Color.rgb(40,43,48));
+            texto.setTextColor(Color.WHITE);
+        }else{
+            layout.setBackgroundColor(Color.WHITE);
+            texto.setTextColor(Color.BLACK);
+        }
 
         noImportante.setVisibility(View.VISIBLE);
         importante.setVisibility(View.GONE);
 
-        builder.setView(dialogoView).setMessage("nueva nota");
+        builder.setView(dialogoView);
 
         /**
          * cuando le des al checkBox se cambia de forma la estrella de importante

@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.newNote){
-            NewNote nn = new NewNote();
-            nn.show(getSupportFragmentManager(),"nueva nota");
+            NewNote nn = new NewNote(modoOscuro);
+            nn.show(getSupportFragmentManager(),null);
         }
         return false;
     }
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     @Override
     public void onClick(int posicion) {
         //Toast.makeText(this, ""+posicion, Toast.LENGTH_SHORT).show();
-        ViewNote vn = new ViewNote(notas.get(posicion),posicion);
-        vn.show(getSupportFragmentManager(),"Ver nota");
+        ViewNote vn = new ViewNote(notas.get(posicion),posicion,modoOscuro);
+        vn.show(getSupportFragmentManager(),null);
     }
 
     @Override
@@ -173,10 +173,12 @@ public class MainActivity extends AppCompatActivity implements OnClick {
             //Toast.makeText(this, "true", Toast.LENGTH_SHORT).show();
             layout.setBackgroundColor(Color.rgb(40,43,48));
             listado.setBackgroundColor(Color.rgb(40,43,48));
+            oscuroCheck.setTextColor(Color.WHITE);
         }else{
             //Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
             layout.setBackgroundColor(Color.WHITE);
             listado.setBackgroundColor(Color.WHITE);
+            oscuroCheck.setTextColor(Color.BLACK);
         }
         setAdaptador();
     }
