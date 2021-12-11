@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -26,6 +28,7 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
         this.notas=notas;
         this.onClick=onClick;
         this.modoOscuro=modoOScuro;
+
     }
 
     @NonNull
@@ -89,7 +92,7 @@ public class Adaptator extends RecyclerView.Adapter<Adaptator.ViewHolder> {
         @Override
         public boolean onLongClick(View v) {
             int posicion = getAdapterPosition();
-            onClick.onLongClick(posicion);
+            onClick.onLongClick(posicion,layout);
             return false;
         }
     }

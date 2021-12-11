@@ -1,5 +1,7 @@
 package com.example.keepneo;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 public interface OnClick {
 
     /**
@@ -12,5 +14,5 @@ public interface OnClick {
      * que hacer cuando se mantiene pulsado a la nota del RecyclerView
      * @param posicion de la nota en relacion a la lista donde se almacenan
      */
-    public void onLongClick(int posicion);
+    public void onLongClick(int posicion, ConstraintLayout layout);
 }

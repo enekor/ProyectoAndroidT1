@@ -1,9 +1,13 @@
 package com.example.keepneo;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -25,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     private LinearLayoutManager llm;
     private ConstraintLayout layout;
     private Switch oscuroCheck;
+    private Animation blink;
 
-    private boolean modoOscuro = true;
     private JSonSerialicer serialicer;
 
     @Override
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.newNote){
-            ViewNote vn = new ViewNote(null,-1,modoOscuro,true);
+            ViewNote vn = new ViewNote(null,-1,leerModo(),true);
             vn.show(getSupportFragmentManager(),null);
         }
         return false;
@@ -62,13 +66,14 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     @Override
     public void onClick(int posicion) {
         //Toast.makeText(this, ""+posicion, Toast.LENGTH_SHORT).show();
-        ViewNote vn = new ViewNote(notas.get(posicion),posicion,modoOscuro,false);
+        ViewNote vn = new ViewNote(notas.get(posicion),posicion,leerModo(),false);
         vn.show(getSupportFragmentManager(),null);
     }
 
     @Override
-    public void onLongClick(int posicion) {
-        borrarObjeto(posicion).show();
+    public void onLongClick(int posicion, ConstraintLayout layout) {
+
+        borrarObjeto(posicion,layout).show();
     }
 
     /**
@@ -82,13 +87,13 @@ public class MainActivity extends AppCompatActivity implements OnClick {
 
         layout = findViewById(R.id.layoutMain);
         oscuroCheck = findViewById(R.id.modoOscuro);
-        oscuroCheck.setChecked(modoOscuro);
+        oscuroCheck.setChecked(leerModo());
 
         notas = leerFichero();
+        blink = AnimationUtils.loadAnimation(this,R.anim.seleccion_prolongada);
 
         cambiarModo();
         setAdaptador();
-
     }
 
     /**
@@ -141,38 +146,47 @@ public class MainActivity extends AppCompatActivity implements OnClick {
      * crea un nuevo adaptador con la lista de notas actualizada y la setea como adaptador del RecyclerView
      */
     private void setAdaptador() {
-        adaptador = new Adaptator(notas, this,this.modoOscuro);
+        adaptador = new Adaptator(notas, this,leerModo());
         listado.setAdapter(adaptador);
     }
 
-    private AlertDialog borrarObjeto(int posicion) {
-        AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+    private AlertDialog borrarObjeto(int posicion, ConstraintLayout layout) {
 
-        alerta.setMessage("se procedera a borrar la nota")
+        AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+        layout.startAnimation(blink);
+
+        alerta.setMessage("Se procedera a borrar la nota")
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         notas.remove(posicion);
+                        layout.clearAnimation();
                         setAdaptador();
                     }
                 })
                 .setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        layout.clearAnimation();
                     }
                 });
 
+        alerta.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                layout.clearAnimation();
+            }
+        });
         return alerta.create();
     }
 
     /**
-     * cambia de modo de color (oscuro o no) dependiendo de la variable modoOscuro,
+     * cambia de modo de color (oscuro o no) dependiendo de la sharedPreference oscuro,
      * que determina el modo actual
      */
     private void cambiarModo() {
 
-        if(this.modoOscuro){
+        if(leerModo()){
             layout.setBackgroundColor(Color.rgb(40,43,48));
             listado.setBackgroundColor(Color.rgb(40,43,48));
             oscuroCheck.setTextColor(Color.WHITE);
@@ -192,10 +206,32 @@ public class MainActivity extends AppCompatActivity implements OnClick {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                modoOscuro = isChecked;
+                guardarModo(isChecked);
 
                 cambiarModo();
             }
         });
     }
+
+    /**
+     * guarda en una shared preference el modo preferido por el usuario para poder persistirlo
+     * en el siguiente inicio de la aplicacion
+     * @param modoOscuro el modo actual a guardar
+     */
+    private void guardarModo(boolean modoOscuro){
+        SharedPreferences preferencias = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferencias.edit();
+        editor.putBoolean("oscuro", modoOscuro);
+        editor.apply();
+    }
+
+    /**
+     * lee de la shared preference el modo preferido y lo returnea
+     * @return el modo preferido por el usuario, siendo true oscuro y false blanco
+     */
+    private boolean leerModo(){
+        SharedPreferences preferencias = getSharedPreferences("preferencias",Context.MODE_PRIVATE);
+        return preferencias.getBoolean("oscuro",true);
+    }
+
 }
