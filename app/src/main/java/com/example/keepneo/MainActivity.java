@@ -3,22 +3,20 @@ package com.example.keepneo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.*;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnClick {
@@ -28,8 +26,9 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     private Adaptator adaptador;
     private LinearLayoutManager llm;
     private ConstraintLayout layout;
-    private Switch oscuroCheck;
+    private Toolbar toolbar;
     private Animation blink;
+    private ImageView newNote;
 
     private JSonSerialicer serialicer;
 
@@ -46,21 +45,6 @@ public class MainActivity extends AppCompatActivity implements OnClick {
     protected void onPause() {
         super.onPause();
         guardarNotas();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_menu,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.newNote){
-            ViewNote vn = new ViewNote(null,-1,leerModo(),true);
-            vn.show(getSupportFragmentManager(),null);
-        }
-        return false;
     }
 
     @Override
@@ -84,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements OnClick {
         listado = findViewById(R.id.reciclerViewNotas);
         llm = new LinearLayoutManager(this);
         listado.setLayoutManager(llm);
-
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         layout = findViewById(R.id.layoutMain);
-        oscuroCheck = findViewById(R.id.modoOscuro);
-        oscuroCheck.setChecked(leerModo());
+        newNote = findViewById(R.id.newNote);
 
         notas = leerFichero();
         blink = AnimationUtils.loadAnimation(this,R.anim.seleccion_prolongada);
@@ -189,11 +173,11 @@ public class MainActivity extends AppCompatActivity implements OnClick {
         if(leerModo()){
             layout.setBackgroundColor(Color.rgb(40,43,48));
             listado.setBackgroundColor(Color.rgb(40,43,48));
-            oscuroCheck.setTextColor(Color.WHITE);
+            //oscuroCheck.setTextColor(Color.WHITE);
         }else{
             layout.setBackgroundColor(Color.rgb(240,240,240));
             listado.setBackgroundColor(Color.rgb(240,240,240));
-            oscuroCheck.setTextColor(Color.BLACK);
+            //oscuroCheck.setTextColor(Color.BLACK);
         }
         setAdaptador();
     }
@@ -202,13 +186,19 @@ public class MainActivity extends AppCompatActivity implements OnClick {
      * donde se almacenan los listener de los botones (en este caso solo 1)
      */
     private void listeners(){
-        oscuroCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
+        newNote.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                guardarModo(isChecked);
+            public void onClick(View v) {
+                ViewNote vn = new ViewNote(null,-1,leerModo(),true);
+                vn.show(getSupportFragmentManager(),null);
+            }
+        });
 
-                cambiarModo();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Menu menu = new Menu(leerModo());
+                menu.show(getSupportFragmentManager(),null);
             }
         });
     }
@@ -234,4 +224,19 @@ public class MainActivity extends AppCompatActivity implements OnClick {
         return preferencias.getBoolean("oscuro",true);
     }
 
+    /**
+     * dependiendo del objeto pasado por parametro actuara con el intent de una manera u otra, a no ser que sea un booleano, que en ese caso,
+     * al ser el cambio de modo de color, llamara al metodo encargado de ello
+     * @param o instruccion a seguir
+     */
+    public void intent(Object o){
+        Intent intent = new Intent(this,MenuActivity.class);
+        if(o.equals(true) || o.equals(false)){
+            guardarModo((boolean)o);
+        }else if(o.equals("about")){
+            //...
+        }else if(o.equals(("help"))){
+            //...
+        }
+    }
 }
