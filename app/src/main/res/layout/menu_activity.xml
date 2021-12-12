@@ -7,8 +7,8 @@
                                                    android:id="@+id/menuActivityLayout">
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" tools:srcCompat="@tools:sample/avatars" android:id="@+id/imageSecond"
+            android:layout_width="257dp"
+            android:layout_height="220dp" tools:srcCompat="@tools:sample/avatars" android:id="@+id/imageSecond"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="50dp"/>
@@ -20,7 +20,7 @@
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:orientation="vertical">
             <TextView
-                    android:text="TextView"
+                    android:text=""
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/textSecond"/>
         </LinearLayout>
