@@ -57,9 +57,9 @@
         Never gonna make you cry "&#xA;"
         Never gonna say goodbye</string>
 
-    <string name="howUse">crear nota: boton +"&#xA;"
-        borrar nota: mantener pulsada la nota"&#xA;"
-        cambiar color: sandwich/"&#39;"Modo oscuro/claro"&#39;"</string>
+    <string name="howUse">"&#xA;"Crear nota: boton +"&#xA;"
+        Borrar nota: mantener pulsada la nota"&#xA;"
+        Cambiar color: sandwich/"&#39;"Modo oscuro/claro"&#39;"</string>
     <string name="about_us">About us</string>
     <string name="como_usar">Como usar</string>
     <string name="sample_text">Sample Text</string>

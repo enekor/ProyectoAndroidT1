@@ -6,14 +6,14 @@
 
     <EditText
             android:id="@+id/noteText"
-            android:layout_width="410dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:hint="@string/sample_text"
             android:inputType="textMultiLine"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="50dp"
             android:paddingLeft="15dp"/>
     <CheckBox
             android:id="@+id/importantCheck"
