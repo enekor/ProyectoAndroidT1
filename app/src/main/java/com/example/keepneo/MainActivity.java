@@ -208,11 +208,12 @@ public class MainActivity extends AppCompatActivity implements OnClick {
      * en el siguiente inicio de la aplicacion
      * @param modoOscuro el modo actual a guardar
      */
-    private void guardarModo(boolean modoOscuro){
+    public void guardarModo(boolean modoOscuro){
         SharedPreferences preferencias = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferencias.edit();
         editor.putBoolean("oscuro", modoOscuro);
         editor.apply();
+        cambiarModo();
     }
 
     /**
@@ -234,9 +235,11 @@ public class MainActivity extends AppCompatActivity implements OnClick {
         if(o.equals(true) || o.equals(false)){
             guardarModo((boolean)o);
         }else if(o.equals("about")){
-            //...
+            intent.putExtra("texto", "About");
+            startActivity(intent);
         }else if(o.equals(("help"))){
-            //...
+            intent.putExtra("texto", "Help");
+            startActivity(intent);
         }
     }
 }
